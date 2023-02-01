@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_note_app/constant.dart';
-import 'package:simple_note_app/note_list_drawer/note_list_drawer_main.dart';
+import 'package:simple_note_app/view/note_list_drawer/note_list_drawer_main.dart';
 
 class NotePageMain extends StatelessWidget {
   NotePageMain({super.key});

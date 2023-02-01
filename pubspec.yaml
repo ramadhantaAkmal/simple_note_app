@@ -50,6 +50,8 @@ dev_dependencies:
   easy_search_bar: ^2.4.2
   flutter_slidable: ^2.0.0
   google_fonts: ^4.0.1
+  sqflite: ^2.2.4+1
+  path: ^1.8.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

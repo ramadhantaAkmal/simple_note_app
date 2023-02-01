@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_note_app/constant.dart';
-import 'package:simple_note_app/note_page/note_page_main.dart';
+import 'package:simple_note_app/view/note_page/note_page_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
