@@ -1,20 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:simple_note_app/constant.dart';
+import 'package:simple_note_app/db/database_provider.dart';
+import 'package:simple_note_app/model/note_model.dart';
 import 'package:simple_note_app/view/note_list_drawer/note_list_drawer_main.dart';
 
-class NotePageMain extends StatelessWidget {
+class NotePageMain extends StatefulWidget {
   NotePageMain({super.key});
+
+  @override
+  State<NotePageMain> createState() => _NotePageMainState();
+}
+
+class _NotePageMainState extends State<NotePageMain> {
+  String title = "null";
+  String desc = "null";
 
   final TextEditingController _title = TextEditingController(text: "Title");
   final TextEditingController _desc = TextEditingController();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  getNote(int id) async {
+    var note = DatabaseProvider.db.readNote(id);
+    return note;
+  }
+
+  addNote(NoteModel note) {
+    DatabaseProvider.db.addNewNote(note);
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         key: _key,
-        drawer: NoteListDrawer(),
+        drawer: const NoteListDrawer(),
         appBar: _buildAppBar(),
         body: _buildBody(context),
       ),
@@ -46,7 +65,15 @@ class NotePageMain extends StatelessWidget {
       actions: <Widget>[
         Center(
           child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  title = _title.text;
+                  desc = _desc.text;
+                  _title.text = "";
+                  _desc.text = "";
+                });
+                addNote(NoteModel(title: title, desc: desc));
+              },
               icon: const Icon(
                 Icons.save,
                 color: bodyTextColor,

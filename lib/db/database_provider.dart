@@ -7,6 +7,7 @@ class DatabaseProvider {
   static final DatabaseProvider db = DatabaseProvider._();
   static Database? _database;
 
+  //checking if database already available
   Future<Database?> get database async {
     if (_database != null) {
       return _database;
@@ -21,9 +22,9 @@ class DatabaseProvider {
         onCreate: (db, version) async {
       await db.execute('''
                 CREATE TABLE notes(
-                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                   title TEXT,
-                  desc TEXT,
+                  desc TEXT
                 )
             ''');
     }, version: 1);
@@ -32,7 +33,7 @@ class DatabaseProvider {
   //add new note to table
   addNewNote(NoteModel note) async {
     final db = await database;
-    db!.insert(
+    db?.insert(
       "notes",
       note.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -42,12 +43,29 @@ class DatabaseProvider {
   //getting the notes as list
   Future<dynamic> getNotes() async {
     final db = await database;
-    var res = await db!.query("notes");
-    if (res.isEmpty) {
+    var res = await db?.query("notes");
+    if (res!.isEmpty) {
       return Null;
     } else {
       var resultMap = res.toList();
-      return resultMap;
+      return resultMap.isNotEmpty ? resultMap : Null;
     }
+  }
+
+  Future<dynamic> readNote(int id) async {
+    final db = await database;
+    var list = await db!.rawQuery('SELECT * FROM Notes WHERE id = ?', [id]);
+    return list;
+  }
+
+  void updateNote(String title, String desc, int id) async {
+    final db = await database;
+    await db!.rawUpdate(
+        'UPDATE notes SET title = ?, desc = ? WHERE id =?', [title, desc, id]);
+  }
+
+  void deleteNote(int id) async {
+    final db = await database;
+    await db!.rawDelete('DELETE FROM notes WHERE id = ?', [id]);
   }
 }
