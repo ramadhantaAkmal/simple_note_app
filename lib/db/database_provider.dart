@@ -45,10 +45,10 @@ class DatabaseProvider {
     final db = await database;
     var res = await db?.query("notes");
     if (res!.isEmpty) {
-      return Null;
+      return null;
     } else {
       var resultMap = res.toList();
-      return resultMap.isNotEmpty ? resultMap : Null;
+      return resultMap.isNotEmpty ? resultMap : null;
     }
   }
 
@@ -64,7 +64,7 @@ class DatabaseProvider {
         'UPDATE notes SET title = ?, desc = ? WHERE id =?', [title, desc, id]);
   }
 
-  void deleteNote(int id) async {
+  Future<void> deleteNote(int id) async {
     final db = await database;
     await db!.rawDelete('DELETE FROM notes WHERE id = ?', [id]);
   }

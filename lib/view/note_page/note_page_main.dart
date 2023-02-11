@@ -3,9 +3,12 @@ import 'package:simple_note_app/constant.dart';
 import 'package:simple_note_app/db/database_provider.dart';
 import 'package:simple_note_app/model/note_model.dart';
 import 'package:simple_note_app/view/note_list_drawer/note_list_drawer_main.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../logic/notebloc/note_bloc.dart';
 
 class NotePageMain extends StatefulWidget {
-  NotePageMain({super.key});
+  const NotePageMain({super.key});
 
   @override
   State<NotePageMain> createState() => _NotePageMainState();
@@ -19,10 +22,10 @@ class _NotePageMainState extends State<NotePageMain> {
   final TextEditingController _desc = TextEditingController();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-  getNote(int id) async {
-    var note = DatabaseProvider.db.readNote(id);
-    return note;
-  }
+  // getNote(int id) async {
+  //   var note = DatabaseProvider.db.readNote(id);
+  //   return note;
+  // }
 
   addNote(NoteModel note) {
     DatabaseProvider.db.addNewNote(note);
@@ -34,13 +37,15 @@ class _NotePageMainState extends State<NotePageMain> {
       child: Scaffold(
         key: _key,
         drawer: const NoteListDrawer(),
-        appBar: _buildAppBar(),
+        appBar: _buildAppBar(context),
         body: _buildBody(context),
       ),
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(BuildContext context) {
+    var noteBlock = BlocProvider.of<NoteBloc>(context);
+
     return AppBar(
       title: TextField(
         cursorColor: bodyTextColor,
@@ -55,6 +60,7 @@ class _NotePageMainState extends State<NotePageMain> {
       leading: Center(
         child: IconButton(
             onPressed: () {
+              noteBlock.add(GetNotes());
               _key.currentState?.openDrawer();
             },
             icon: const Icon(
