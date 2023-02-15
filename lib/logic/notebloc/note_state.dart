@@ -3,28 +3,29 @@ part of 'note_bloc.dart';
 @immutable
 abstract class NoteState {}
 
-class NoteLoads extends NoteState {
-  final dynamic list;
-
-  NoteLoads({required this.list});
-
-  NoteLoads copyWith({dynamic list}) {
-    return NoteLoads(
-      list: list ?? this.list,
-    );
-  }
+class NoteInitial extends NoteState {
+  NoteInitial();
 }
 
-class NoteFetching extends NoteState {}
+class TextState extends NoteState {
+  final int? id;
+  final String? title;
+  final String? desc;
+  final dynamic list;
 
-class GetNote extends NoteState {
-  final NoteModel note;
+  TextState({
+    this.id,
+    this.title,
+    this.desc,
+    this.list,
+  });
 
-  GetNote({required this.note});
-
-  GetNote copyWith({NoteModel? note}) {
-    return GetNote(
-      note: note ?? this.note,
-    );
+  TextState copyWith({
+    int? id,
+    String? title,
+    String? desc,
+    dynamic list,
+  }) {
+    return TextState(id: id, title: title, desc: desc, list: list);
   }
 }

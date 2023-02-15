@@ -16,31 +16,17 @@ class NoteListDrawer extends StatefulWidget {
 class _NoteListDrawerState extends State<NoteListDrawer> {
   String searchValue = '';
 
-  // getNotes() async {
-  //   final notes = await DatabaseProvider.db.getNotes();
-  //   return notes;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    NoteBloc noteBloc = BlocProvider.of<NoteBloc>(context);
     return Drawer(
       child: BlocBuilder<NoteBloc, NoteState>(
         builder: (context, state) {
-          if (state is NoteFetching) {
+          TextState textState = state as TextState;
+          if (textState.list == null) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: Text("no notes"),
             );
           }
-
-          var list = (state as NoteLoads).list;
-
-          if (list == null) {
-            return const Center(
-              child: Text("uhh non"),
-            );
-          }
-
           return Column(
             children: [
               SizedBox(
@@ -54,12 +40,11 @@ class _NoteListDrawerState extends State<NoteListDrawer> {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
-                itemCount: list.length,
+                itemCount: textState.list.length,
                 itemBuilder: ((context, index) {
                   return NoteListDrawerCard(
-                    notesTitle: list[index]['title'],
-                    index: index,
-                    id: list[index]['id'],
+                    notesTitle: textState.list[index]['title'],
+                    id: textState.list[index]['id'],
                   );
                 }),
               ),

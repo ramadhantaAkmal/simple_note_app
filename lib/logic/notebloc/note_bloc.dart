@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:simple_note_app/db/database_provider.dart';
 import 'package:simple_note_app/model/note_model.dart';
@@ -7,17 +8,19 @@ part 'note_event.dart';
 part 'note_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
-  NoteBloc() : super(NoteLoads(list: null)) {
+  NoteBloc() : super(TextState(id: null, title: 'Title', desc: '')) {
     on<AddNote>((event, emit) {
       var noteObject = event.note;
       DatabaseProvider.db.addNewNote(noteObject);
     });
 
     on<ReadNote>((event, emit) async {
-      GetNote noteRead = state as GetNote;
       int id = event.id;
       var note = await DatabaseProvider.db.readNote(id);
-      emit(noteRead.copyWith(note: note));
+      var list = await DatabaseProvider.db.getNotes();
+
+      emit(TextState(
+          id: id, title: note[0]['title'], desc: note[0]['desc'], list: list));
     });
 
     on<UpdateNote>((event, emit) {
@@ -34,10 +37,23 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
       await DatabaseProvider.db.deleteNote(id);
     });
 
-    on<GetNotes>((event, emit) async {
-      NoteLoads noteLoads = state as NoteLoads;
-      var list = await DatabaseProvider.db.getNotes();
-      emit(noteLoads.copyWith(list: list));
-    });
+    on<GetNotes>(
+      ((event, emit) async {
+        var list = await DatabaseProvider.db.getNotes();
+        try {
+          (event.desc == '')
+              ? emit(TextState(
+                  list: list,
+                ))
+              : emit(TextState(
+                  title: event.title,
+                  desc: event.desc,
+                  list: list,
+                ));
+        } catch (e) {
+          print(e);
+        }
+      }),
+    );
   }
 }

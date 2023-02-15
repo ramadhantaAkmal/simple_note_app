@@ -3,17 +3,16 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:simple_note_app/db/database_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_note_app/logic/notebloc/note_bloc.dart';
+import 'package:simple_note_app/model/note_model.dart';
 
 class NoteListDrawerCard extends StatelessWidget {
   const NoteListDrawerCard({
     super.key,
     required this.notesTitle,
-    required this.index,
     required this.id,
   });
 
   final String notesTitle;
-  final int index;
   final int id;
 
   @override
@@ -25,11 +24,9 @@ class NoteListDrawerCard extends StatelessWidget {
         motion: const BehindMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) async {
+            onPressed: (context) {
               noteBloc.add(DeleteNote(id));
-
-              await Future.delayed(const Duration(milliseconds: 500));
-              noteBloc.add(GetNotes());
+              noteBloc.add(GetNotes('', ''));
             },
             backgroundColor: const Color.fromARGB(255, 138, 131, 131),
             foregroundColor: Colors.white,
@@ -45,7 +42,12 @@ class NoteListDrawerCard extends StatelessWidget {
       ),
       child: ListTile(
         onTap: () {
-          Navigator.of(context).pop();
+          try {
+            noteBloc.add(ReadNote(id));
+          } catch (e) {
+            print(e);
+          }
+          Navigator.pop(context);
         },
         title: Text(notesTitle),
       ),

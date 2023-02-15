@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'logic/notebloc/note_bloc.dart';
-import 'logic/searchbloc/search_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,12 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => NoteBloc(),
-        ),
-        BlocProvider(
-          create: (context) => SearchBloc(),
-        ),
+        BlocProvider(create: (context) => NoteBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -38,7 +32,7 @@ class MyApp extends StatelessWidget {
                 bodyText2: const TextStyle(color: bodyTextColor),
               ),
         ),
-        home: const NotePageMain(),
+        home: NotePageMain(),
       ),
     );
   }

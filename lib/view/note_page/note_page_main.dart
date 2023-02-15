@@ -15,52 +15,74 @@ class NotePageMain extends StatefulWidget {
 }
 
 class _NotePageMainState extends State<NotePageMain> {
-  String title = "null";
-  String desc = "null";
-
-  final TextEditingController _title = TextEditingController(text: "Title");
-  final TextEditingController _desc = TextEditingController();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  String title = 'null', desc = 'null';
 
-  // getNote(int id) async {
-  //   var note = DatabaseProvider.db.readNote(id);
-  //   return note;
-  // }
+  bool isEdited = false, onUpdate = true;
+  late TextEditingController titleController, descController;
 
-  addNote(NoteModel note) {
-    DatabaseProvider.db.addNewNote(note);
+  @override
+  void initState() {
+    titleController = TextEditingController();
+    descController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        key: _key,
-        drawer: const NoteListDrawer(),
-        appBar: _buildAppBar(context),
-        body: _buildBody(context),
-      ),
+    return BlocBuilder<NoteBloc, NoteState>(
+      builder: (context, state) {
+        TextState textState = state as TextState;
+        if (onUpdate) {
+          isEdited = false;
+        }
+
+        if (textState.id != null && isEdited == false) {
+          titleController.text = textState.title!;
+          descController.text = textState.desc!;
+        }
+        return SafeArea(
+            child: Scaffold(
+          key: _key,
+          drawer: const NoteListDrawer(),
+          appBar: buildAppBar(context, textState, titleController),
+          body: buildBody(context, descController),
+        ));
+      },
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  AppBar buildAppBar(BuildContext context, TextState state,
+      TextEditingController titleController) {
     var noteBlock = BlocProvider.of<NoteBloc>(context);
 
     return AppBar(
       title: TextField(
         cursorColor: bodyTextColor,
-        controller: _title,
+        controller: titleController,
         showCursor: true,
         decoration: const InputDecoration(
           hintText: "Enter Title",
           border: InputBorder.none,
         ),
+        onChanged: (value) {
+          isEdited = true;
+          onUpdate = false;
+        },
       ),
       centerTitle: true,
       leading: Center(
         child: IconButton(
             onPressed: () {
-              noteBlock.add(GetNotes());
+              noteBlock
+                  .add(GetNotes(titleController.text, descController.text));
               _key.currentState?.openDrawer();
             },
             icon: const Icon(
@@ -72,13 +94,23 @@ class _NotePageMainState extends State<NotePageMain> {
         Center(
           child: IconButton(
               onPressed: () {
-                setState(() {
-                  title = _title.text;
-                  desc = _desc.text;
-                  _title.text = "";
-                  _desc.text = "";
-                });
-                addNote(NoteModel(title: title, desc: desc));
+                if (state.id == null) {
+                  if ((titleController.text.isNotEmpty &&
+                      descController.text.isNotEmpty)) {
+                    title = titleController.text;
+                    desc = descController.text;
+                    titleController.text = '';
+                    descController.text = '';
+                    noteBlock.add(GetNotes(title, desc));
+                    noteBlock.add(AddNote(NoteModel(title: title, desc: desc)));
+                  }
+                } else {
+                  title = titleController.text;
+                  desc = descController.text;
+                  titleController.text = '';
+                  descController.text = '';
+                  noteBlock.add(UpdateNote(title, desc, state.id!));
+                }
               },
               icon: const Icon(
                 Icons.save,
@@ -89,7 +121,7 @@ class _NotePageMainState extends State<NotePageMain> {
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context, TextEditingController descontroller) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 5,
@@ -100,7 +132,7 @@ class _NotePageMainState extends State<NotePageMain> {
         width: MediaQuery.of(context).size.height,
         child: TextField(
           cursorColor: bodyTextColor,
-          controller: _desc,
+          controller: descController,
           showCursor: true,
           decoration: const InputDecoration(
             hintText: "Enter Description",
@@ -113,6 +145,10 @@ class _NotePageMainState extends State<NotePageMain> {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
           ),
+          onChanged: (value) {
+            isEdited = true;
+            onUpdate = false;
+          },
           expands: true,
           maxLines: null,
           minLines: null,

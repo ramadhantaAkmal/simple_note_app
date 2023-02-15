@@ -30,5 +30,8 @@ class DeleteNote extends NoteEvent {
 }
 
 class GetNotes extends NoteEvent {
-  GetNotes();
+  final String title;
+  final String desc;
+
+  GetNotes(this.title, this.desc);
 }
