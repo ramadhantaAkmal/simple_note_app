@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:simple_note_app/constant.dart';
-import 'package:simple_note_app/db/database_provider.dart';
 import 'package:simple_note_app/model/note_model.dart';
 import 'package:simple_note_app/view/note_list_drawer/note_list_drawer_main.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simple_note_app/db/database_provider.dart';
 
 import '../../logic/notebloc/note_bloc.dart';
 
@@ -19,27 +19,15 @@ class _NotePageMainState extends State<NotePageMain> {
   String title = 'null', desc = 'null';
 
   bool isEdited = false, onUpdate = true;
-  late TextEditingController titleController, descController;
-
-  @override
-  void initState() {
-    titleController = TextEditingController();
-    descController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    titleController.dispose();
-    descController.dispose();
-    super.dispose();
-  }
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NoteBloc, NoteState>(
       builder: (context, state) {
         TextState textState = state as TextState;
+
         if (onUpdate) {
           isEdited = false;
         }
@@ -64,7 +52,7 @@ class _NotePageMainState extends State<NotePageMain> {
     var noteBlock = BlocProvider.of<NoteBloc>(context);
 
     return AppBar(
-      title: TextField(
+      title: TextFormField(
         cursorColor: bodyTextColor,
         controller: titleController,
         showCursor: true,
@@ -95,21 +83,22 @@ class _NotePageMainState extends State<NotePageMain> {
           child: IconButton(
               onPressed: () {
                 if (state.id == null) {
-                  if ((titleController.text.isNotEmpty &&
+                  if ((titleController.text.isNotEmpty ||
                       descController.text.isNotEmpty)) {
                     title = titleController.text;
                     desc = descController.text;
-                    titleController.text = '';
-                    descController.text = '';
+                    titleController.clear();
+                    descController.clear();
                     noteBlock.add(GetNotes(title, desc));
                     noteBlock.add(AddNote(NoteModel(title: title, desc: desc)));
                   }
                 } else {
                   title = titleController.text;
                   desc = descController.text;
-                  titleController.text = '';
-                  descController.text = '';
+                  titleController.clear();
+                  descController.clear();
                   noteBlock.add(UpdateNote(title, desc, state.id!));
+                  onUpdate = true;
                 }
               },
               icon: const Icon(

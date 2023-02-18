@@ -58,7 +58,7 @@ class DatabaseProvider {
     return list;
   }
 
-  void updateNote(String title, String desc, int id) async {
+  updateNote(String title, String desc, int id) async {
     final db = await database;
     await db!.rawUpdate(
         'UPDATE notes SET title = ?, desc = ? WHERE id =?', [title, desc, id]);

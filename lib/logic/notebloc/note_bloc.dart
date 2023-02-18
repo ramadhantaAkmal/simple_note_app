@@ -23,12 +23,13 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
           id: id, title: note[0]['title'], desc: note[0]['desc'], list: list));
     });
 
-    on<UpdateNote>((event, emit) {
+    on<UpdateNote>((event, emit) async {
       int id = event.id;
       String title = event.title;
       String desc = event.desc;
 
-      DatabaseProvider.db.updateNote(title, desc, id);
+      await DatabaseProvider.db.updateNote(title, desc, id);
+      emit(TextState(id: null));
     });
 
     on<DeleteNote>((event, emit) async {

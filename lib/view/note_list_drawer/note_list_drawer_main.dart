@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
-import 'package:simple_note_app/db/database_provider.dart';
 import 'package:simple_note_app/view/note_list_drawer/note_list_drawer_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

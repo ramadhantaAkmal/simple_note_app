@@ -28,11 +28,11 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
               .apply(bodyColor: bodyTextColor)
               .copyWith(
-                bodyText1: const TextStyle(color: bodyTextColor),
-                bodyText2: const TextStyle(color: bodyTextColor),
+                bodyLarge: const TextStyle(color: bodyTextColor),
+                bodyMedium: const TextStyle(color: bodyTextColor),
               ),
         ),
-        home: NotePageMain(),
+        home: const NotePageMain(),
       ),
     );
   }

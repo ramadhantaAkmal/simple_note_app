@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:simple_note_app/db/database_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_note_app/logic/notebloc/note_bloc.dart';
-import 'package:simple_note_app/model/note_model.dart';
+import 'dart:developer' as developer;
 
 class NoteListDrawerCard extends StatelessWidget {
   const NoteListDrawerCard({
@@ -45,7 +44,7 @@ class NoteListDrawerCard extends StatelessWidget {
           try {
             noteBloc.add(ReadNote(id));
           } catch (e) {
-            print(e);
+            developer.log(e.toString(), name: 'my.app.category');
           }
           Navigator.pop(context);
         },
