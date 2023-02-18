@@ -3,7 +3,6 @@ import 'package:simple_note_app/constant.dart';
 import 'package:simple_note_app/model/note_model.dart';
 import 'package:simple_note_app/view/note_list_drawer/note_list_drawer_main.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simple_note_app/db/database_provider.dart';
 
 import '../../logic/notebloc/note_bloc.dart';
 
@@ -69,8 +68,7 @@ class _NotePageMainState extends State<NotePageMain> {
       leading: Center(
         child: IconButton(
             onPressed: () {
-              noteBlock
-                  .add(GetNotes(titleController.text, descController.text));
+              noteBlock.add(GetNotes('', ''));
               _key.currentState?.openDrawer();
             },
             icon: const Icon(

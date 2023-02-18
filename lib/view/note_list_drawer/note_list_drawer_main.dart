@@ -13,8 +13,6 @@ class NoteListDrawer extends StatefulWidget {
 }
 
 class _NoteListDrawerState extends State<NoteListDrawer> {
-  String searchValue = '';
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -29,12 +27,13 @@ class _NoteListDrawerState extends State<NoteListDrawer> {
           return Column(
             children: [
               SizedBox(
-                height: 60,
-                child: EasySearchBar(
-                  onSearch: (value) => setState(() => searchValue = value),
-                  title: const Text('Note List'),
-                ),
-              ),
+                  height: 60,
+                  child: EasySearchBar(
+                    onSearch: (value) {
+                      BlocProvider.of<NoteBloc>(context).add(SearchNote(value));
+                    },
+                    title: const Text('Note List'),
+                  )),
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,

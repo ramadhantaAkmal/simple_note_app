@@ -32,7 +32,7 @@ class NoteListDrawerCard extends StatelessWidget {
             icon: Icons.delete,
           ),
           SlidableAction(
-            onPressed: doNothing,
+            onPressed: download,
             backgroundColor: const Color.fromARGB(255, 138, 131, 131),
             foregroundColor: Colors.white,
             icon: Icons.download,
@@ -41,11 +41,7 @@ class NoteListDrawerCard extends StatelessWidget {
       ),
       child: ListTile(
         onTap: () {
-          try {
-            noteBloc.add(ReadNote(id));
-          } catch (e) {
-            developer.log(e.toString(), name: 'my.app.category');
-          }
+          noteBloc.add(ReadNote(id));
           Navigator.pop(context);
         },
         title: Text(notesTitle),
@@ -53,5 +49,7 @@ class NoteListDrawerCard extends StatelessWidget {
     );
   }
 
-  void doNothing(BuildContext context) {}
+  void download(BuildContext context) {
+    //TODO: write .txt file feature
+  }
 }

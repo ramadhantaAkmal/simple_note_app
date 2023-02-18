@@ -35,3 +35,9 @@ class GetNotes extends NoteEvent {
 
   GetNotes(this.title, this.desc);
 }
+
+class SearchNote extends NoteEvent {
+  final String searchValue;
+
+  SearchNote(this.searchValue);
+}

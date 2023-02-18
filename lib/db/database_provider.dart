@@ -68,4 +68,12 @@ class DatabaseProvider {
     final db = await database;
     await db!.rawDelete('DELETE FROM notes WHERE id = ?', [id]);
   }
+
+  //search for note using note title
+  Future<dynamic> searchNote(String title) async {
+    final db = await database;
+    var note = await db!
+        .rawQuery('SELECT * FROM Notes WHERE title LIKE ?', ['$title%']);
+    return note;
+  }
 }

@@ -41,20 +41,22 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     on<GetNotes>(
       ((event, emit) async {
         var list = await DatabaseProvider.db.getNotes();
-        try {
-          (event.desc == '')
-              ? emit(TextState(
-                  list: list,
-                ))
-              : emit(TextState(
-                  title: event.title,
-                  desc: event.desc,
-                  list: list,
-                ));
-        } catch (e) {
-          print(e);
-        }
+        (event.desc == '')
+            ? emit(TextState(
+                list: list,
+              ))
+            : emit(TextState(
+                title: event.title,
+                desc: event.desc,
+                list: list,
+              ));
       }),
     );
+
+    on<SearchNote>((event, emit) async {
+      var note = await DatabaseProvider.db.searchNote(event.searchValue);
+
+      emit(TextState(list: note));
+    });
   }
 }
