@@ -43,6 +43,7 @@ class _NoteListDrawerState extends State<NoteListDrawer> {
                   return NoteListDrawerCard(
                     notesTitle: textState.list[index]['title'],
                     id: textState.list[index]['id'],
+                    desc: textState.list[index]['desc'],
                   );
                 }),
               ),
