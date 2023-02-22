@@ -20,6 +20,7 @@ class NoteListDrawerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final noteBloc = BlocProvider.of<NoteBloc>(context);
     WriteFile write = WriteFile();
+    String address = '';
 
     return Slidable(
       startActionPane: ActionPane(
@@ -29,14 +30,25 @@ class NoteListDrawerCard extends StatelessWidget {
             onPressed: (context) {
               noteBloc.add(DeleteNote(id));
               noteBloc.add(GetNotes('', ''));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Note Deleted"),
+                ),
+              );
             },
             backgroundColor: const Color.fromARGB(255, 138, 131, 131),
             foregroundColor: Colors.white,
             icon: Icons.delete,
           ),
           SlidableAction(
-            onPressed: (context) {
+            onPressed: (context) async {
               write.writeFile(notesTitle, desc);
+              address = await write.localPath;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("File saved at $address"),
+                ),
+              );
             },
             backgroundColor: const Color.fromARGB(255, 138, 131, 131),
             foregroundColor: Colors.white,

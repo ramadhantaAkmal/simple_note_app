@@ -89,6 +89,12 @@ class _NotePageMainState extends State<NotePageMain> {
                     descController.clear();
                     noteBlock.add(GetNotes(title, desc));
                     noteBlock.add(AddNote(NoteModel(title: title, desc: desc)));
+                    onUpdate = true;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Note Added"),
+                      ),
+                    );
                   }
                 } else {
                   title = titleController.text;
@@ -97,6 +103,11 @@ class _NotePageMainState extends State<NotePageMain> {
                   descController.clear();
                   noteBlock.add(UpdateNote(title, desc, state.id!));
                   onUpdate = true;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Note Saved"),
+                    ),
+                  );
                 }
               },
               icon: const Icon(
