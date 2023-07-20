@@ -1,5 +1,5 @@
 name: simple_note_app
-description: A new Flutter project.
+description: A simple note taking app made by using flutter.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -38,7 +38,24 @@ dependencies:
   path: ^1.8.2
   flutter_bloc: ^8.1.2
   path_provider: ^2.0.12
+  flutter_launcher_icons: ^0.13.1
 
+flutter_launcher_icons:
+  #  image_path: "assets/images/icon-128x128.png"
+  image_path_android: "assets/Icon/icons8-note-38(-ldpi).png"
+  image_path_ios: "assets/Icon/icons8-note-38(-ldpi).png"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  adaptive_icon_background: "assets/Icon/icons8-note-38(-ldpi).png" # only available for Android 8.0 devices and above
+  adaptive_icon_foreground: "assets/Icon/icons8-note-38(-ldpi).png" # only available for Android 8.0 devices and above
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  remove_alpha_ios: true
+  background_color_ios: "#ffffff"
+  web:
+    generate: true
+    image_path: "assets/Icon/icons8-note-38(-ldpi).png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
